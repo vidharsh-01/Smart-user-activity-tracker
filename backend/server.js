@@ -16,9 +16,10 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/track', require('./routes/trackRoutes'));
 app.use('/api/analytics', require('./routes/analyticsRoutes'));
 
-app.get('/', (req, res) => {
-    res.send('API is running...');
-});
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
+
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
