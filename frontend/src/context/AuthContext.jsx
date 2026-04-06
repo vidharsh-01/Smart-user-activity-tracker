@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        const { data } = await axios.post('http://localhost:5000/api/users/login', {
+        const { data } = await axios.post('https://smart-user-activity-tracker.onrender.com/api/users/login', {
             email,
             password,
         });
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const register = async (name, email, password) => {
-        const { data } = await axios.post('http://localhost:5000/api/users/register', {
+        const { data } = await axios.post('https://smart-user-activity-tracker.onrender.com/api/users/register', {
             name,
             email,
             password,
