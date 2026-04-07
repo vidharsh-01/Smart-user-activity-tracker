@@ -49,11 +49,16 @@ export const TrackingProvider = ({ children }) => {
 
         const handleUnload = () => {
             if (sessionStarted.current && sessionId.current) {
-                // Use sendBeacon for reliable session end
-                navigator.sendBeacon(
-                    `${API}track/session`,
-                    JSON.stringify({ action: 'end', sessionId: sessionId.current })
-                );
+                // Use fetch with keepalive for reliable session end
+                fetch(`${API}/track/session`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                    body: JSON.stringify({ action: 'end', sessionId: sessionId.current }),
+                    keepalive: true
+                });
                 sessionStarted.current = false;
             }
         };
@@ -96,10 +101,15 @@ export const TrackingProvider = ({ children }) => {
         return () => {
             window.removeEventListener('scroll', handleScroll);
             if (maxScroll > 0) {
-                navigator.sendBeacon(
-                    `${API}/track/scroll`,
-                    JSON.stringify({ page: currentPath, value: `${maxScroll}%` })
-                );
+                fetch(`${API}/track/scroll`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                    body: JSON.stringify({ page: currentPath, value: `${maxScroll}%` }),
+                    keepalive: true
+                });
             }
         };
     }, [location.pathname, user]);
