@@ -26,11 +26,11 @@ const AdminDashboard = () => {
                 };
 
                 const [statsRes, viewsRes, clicksRes, activityRes] = await Promise.all([
-                    axios.get('http://localhost:5000/api/analytics/stats', config),
-                    axios.get('http://localhost:5000/api/analytics/page-views', config),
-                    axios.get('http://localhost:5000/api/analytics/click-events', config),
-                    axios.get('http://localhost:5000/api/analytics/daily-activity', config)
-                ]);
+    axios.get(`${API}analytics/stats`, config),
+    axios.get(`${API}analytics/page-views`, config),
+    axios.get(`${API}analytics/click-events`, config),
+    axios.get(`${API}analytics/daily-activity`, config)
+]);
 
                 setStats(statsRes.data);
                 setPageViews(viewsRes.data.map(item => {
