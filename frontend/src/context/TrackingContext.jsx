@@ -36,7 +36,7 @@ export const TrackingProvider = ({ children }) => {
         const startSession = async () => {
             try {
                 const config = { headers: { Authorization: `Bearer ${user.token}` } };
-                const { data } = await axios.post(`${API}/track/session`, { action: 'start' }, config);
+                const { data } = await axios.post(`${API}track/session`, { action: 'start' }, config);
                 sessionId.current = data._id;
                 sessionStarted.current = true;
                 console.log('Session started:', sessionId.current);
