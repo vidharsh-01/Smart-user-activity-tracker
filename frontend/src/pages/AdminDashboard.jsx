@@ -6,6 +6,8 @@ import {
 } from 'recharts';
 import { Users, Eye, MousePointer2, Clock, Filter } from 'lucide-react';
 
+const API = import.meta.env.VITE_API_URL;
+
 const AdminDashboard = () => {
     const { user } = useAuth();
     const [stats, setStats] = useState(null);
