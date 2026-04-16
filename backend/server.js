@@ -18,6 +18,10 @@ app.use('/api/analytics', require('./routes/analyticsRoutes'));
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
+app.get('/', (req, res) => {
+    res.redirect('http://localhost:5173/');
+});
+
 app.use(notFound);
 app.use(errorHandler);
 

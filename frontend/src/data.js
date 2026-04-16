@@ -27,8 +27,24 @@ export const products = [
         id: '4',
         name: 'Minimalist Leather Wallet',
         price: 45,
-        image: 'https://images.unsplash.com/photo-1627123430984-715112995240?w=500&q=80',
+        image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=500&q=80',
         description: 'Slim bifold wallet made from high-quality vegetable-tanned leather. Holds up to 8 cards and cash.',
         category: 'Accessories'
+    },
+    {
+        id: '5',
+        name: 'Mechanical Gaming Keyboard',
+        price: 159,
+        image: 'https://images.unsplash.com/photo-1595225476474-87563907a212?w=500&q=80',
+        description: 'RGB backlit mechanical keyboard with tactile switches for ultimate gaming and typing experience.',
+        category: 'Electronics'
+    },
+    {
+        id: '6',
+        name: 'Ergonomic Gaming Mouse',
+        price: 79,
+        image: 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&q=80',
+        description: 'High-precision tracking, customizable buttons, and ergonomic design for long gaming sessions.',
+        category: 'Electronics'
     }
 ];

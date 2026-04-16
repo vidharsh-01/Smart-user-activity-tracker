@@ -1,47 +1,67 @@
 import { createContext, useState, useContext, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+    const { user } = useAuth();
     const [cartItems, setCartItems] = useState([]);
 
     useEffect(() => {
-        const savedCart = localStorage.getItem('cartItems');
-        if (savedCart) {
-            setCartItems(JSON.parse(savedCart));
+        if (user) {
+            const savedCart = localStorage.getItem(`cartItems_${user._id}`);
+            if (savedCart) {
+                setCartItems(JSON.parse(savedCart));
+            } else {
+                setCartItems([]);
+            }
+        } else {
+            setCartItems([]);
         }
-    }, []);
+    }, [user]);
 
-    useEffect(() => {
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
-    }, [cartItems]);
+    const saveCart = (items) => {
+        if (user) {
+            localStorage.setItem(`cartItems_${user._id}`, JSON.stringify(items));
+        }
+    };
 
     const addToCart = (product) => {
         setCartItems((prevItems) => {
             const existItem = prevItems.find((x) => x.id === product.id);
+            let nextItems;
             if (existItem) {
-                return prevItems.map((x) =>
+                nextItems = prevItems.map((x) =>
                     x.id === product.id ? { ...x, qty: x.qty + 1 } : x
                 );
             } else {
-                return [...prevItems, { ...product, qty: 1 }];
+                nextItems = [...prevItems, { ...product, qty: 1 }];
             }
+            saveCart(nextItems);
+            return nextItems;
         });
     };
 
     const removeFromCart = (id) => {
-        setCartItems((prevItems) => prevItems.filter((x) => x.id !== id));
+        setCartItems((prevItems) => {
+            const nextItems = prevItems.filter((x) => x.id !== id);
+            saveCart(nextItems);
+            return nextItems;
+        });
     };
 
     const updateQty = (id, qty) => {
         if (qty < 1) return;
-        setCartItems((prevItems) =>
-            prevItems.map((x) => (x.id === id ? { ...x, qty } : x))
-        );
+        setCartItems((prevItems) => {
+            const nextItems = prevItems.map((x) => (x.id === id ? { ...x, qty } : x));
+            saveCart(nextItems);
+            return nextItems;
+        });
     };
 
     const clearCart = () => {
         setCartItems([]);
+        if (user) localStorage.removeItem(`cartItems_${user._id}`);
     };
 
     const cartTotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);

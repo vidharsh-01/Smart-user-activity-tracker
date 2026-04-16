@@ -18,7 +18,7 @@ export const TrackingProvider = ({ children }) => {
 
     // Helper to send tracking data
     const trackEvent = useCallback(async (type, data) => {
-        if (!user) return;
+        if (!user || user.isAdmin) return;
         try {
             const config = {
                 headers: { Authorization: `Bearer ${user.token}` },
@@ -31,12 +31,12 @@ export const TrackingProvider = ({ children }) => {
 
     // Session Tracking
     useEffect(() => {
-        if (!user || sessionStarted.current) return;
+        if (!user || user.isAdmin || sessionStarted.current) return;
 
         const startSession = async () => {
             try {
                 const config = { headers: { Authorization: `Bearer ${user.token}` } };
-                const { data } = await axios.post(`${API}track/session`, { action: 'start' }, config);
+                const { data } = await axios.post(`${API}/track/session`, { action: 'start' }, config);
                 sessionId.current = data._id;
                 sessionStarted.current = true;
                 console.log('Session started:', sessionId.current);
@@ -69,7 +69,7 @@ export const TrackingProvider = ({ children }) => {
 
     // Page View Tracking
     useEffect(() => {
-        if (!user) return;
+        if (!user || user.isAdmin) return;
 
         const timer = setTimeout(() => {
             if (lastTrackedPage.current !== location.pathname) {
@@ -83,7 +83,7 @@ export const TrackingProvider = ({ children }) => {
 
     // Scroll Tracking
     useEffect(() => {
-        if (!user) return;
+        if (!user || user.isAdmin) return;
 
         let maxScroll = 0;
         const currentPath = location.pathname;

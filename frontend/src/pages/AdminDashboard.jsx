@@ -26,18 +26,22 @@ const AdminDashboard = () => {
                 };
 
                 const [statsRes, viewsRes, clicksRes, activityRes] = await Promise.all([
-    axios.get(`${API}analytics/stats`, config),
-    axios.get(`${API}analytics/page-views`, config),
-    axios.get(`${API}analytics/click-events`, config),
-    axios.get(`${API}analytics/daily-activity`, config)
+    axios.get(`${API}/analytics/stats`, config),
+    axios.get(`${API}/analytics/page-views`, config),
+    axios.get(`${API}/analytics/click-events`, config),
+    axios.get(`${API}/analytics/daily-activity`, config)
 ]);
 
                 setStats(statsRes.data);
-                setPageViews(viewsRes.data.map(item => {
-                    let label = item._id.replace(/^\//, '');
-                    if (label === '') label = 'Home';
-                    return { name: label, views: item.count };
-                }));
+                setPageViews(
+                    viewsRes.data
+                        .filter(item => item._id !== '/admin')
+                        .map(item => {
+                            let label = item._id.replace(/^\//, '');
+                            if (label === '') label = 'Home';
+                            return { name: label, views: item.count };
+                        })
+                );
                 setClickEvents(clicksRes.data.map(item => ({ name: item._id, clicks: item.count })));
                 setDailyActivity(activityRes.data.map(item => ({ date: item._id, events: item.count })));
 
